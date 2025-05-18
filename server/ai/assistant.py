@@ -8,12 +8,11 @@ model = "gemma3:1b"
 
 class AssistantLLM:
     def __init__(self):
-        self.llm = llm = OllamaLLM(model=model)
+        self.llm = OllamaLLM(model=model)
         self.base_template = base_template
         self.default_prompt = ChatPromptTemplate.from_template(self.base_template)
         self.chain = self.default_prompt | self.llm
 
-    def invoke(self, data: Dict) -> str | any:
+    def invoke(self, data: Dict) -> str:
         response = self.chain.invoke(data)
         return response
-
