@@ -12,10 +12,11 @@ llm = AssistantLLM()
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    data = request.json()
+    data = request.json
     user_message = data.get("message", "")
+    response = llm.invoke({"question": user_message})
 
-    return jsonify({"response": "Hello there!"})
+    return jsonify({"response": response})
 
 if __name__ == "__main__":
     app.run(port=PORT, debug=True)

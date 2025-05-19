@@ -1,5 +1,5 @@
 base_template = """
-Answer the following question. At the beginning of your answer, always start with 'Wagwan?'.
+Answer the following question.
 
 Question: {question}
 Answer:

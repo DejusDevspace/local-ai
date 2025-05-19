@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaPaperPlane } from "react-icons/fa6";
 
 const ChatContainer = () => {
@@ -9,22 +9,82 @@ const ChatContainer = () => {
       content: "Hello! I'm your AI assistant. How can I help you today?",
     },
   ]);
-  // console.log(messages);
+  const [isLoading, setIsLoading] = useState(false);
+  const chatContainerRef = useRef(null);
+
+  // Scroll to bottom of chat
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim() === "") return;
 
-    console.log("form submitted, i guess...");
+    const userMessage = input.trim();
+    setInput("");
+
+    // Add user message to chat
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: userMessage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `Sorry, an error occurred: ${data.error}`,
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: data.response,
+          },
+        ]);
+      }
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry, there was a problem connecting to the assistant.",
+        },
+      ]);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-tone rounded-xl p-4 gap-4">
+      <div
+        className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-tone rounded-xl p-4 gap-6 overflow-y-scroll"
+        ref={chatContainerRef}
+      >
         {messages.map((message, index) => {
           return (
             <div
@@ -33,7 +93,13 @@ const ChatContainer = () => {
                 message.role === "assistant" ? "justify-start" : "justify-end"
               }`}
             >
-              <div className="bg-chat max-w-[80%] p-4 rounded-4xl rounded-br-sm">
+              <div
+                className={`bg-chat max-w-[80%] p-4 rounded-4xl ${
+                  message.role === "assistant"
+                    ? "rounded-bl-sm "
+                    : "rounded-br-sm"
+                }`}
+              >
                 <p>{message.content}</p>
               </div>
             </div>
@@ -48,10 +114,12 @@ const ChatContainer = () => {
             value={input}
             onChange={handleInputChange}
             className="bg-tone text-start p-4 rounded-full w-[90%] h-[48px] border-chat focus:border-blue-700 focus:outline"
+            disabled={isLoading}
           />
           <button
             type="submit"
             className="rounded-full bg-gray-400 p-4 cursor-pointer"
+            disabled={isLoading}
           >
             <FaPaperPlane className="text-white" />
           </button>
