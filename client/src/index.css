@@ -4,7 +4,7 @@
   --color-bg: #eae4d5;
   --color-primary: #000000;
   --color-accent: #000000;
-  --color-tone: #f2f2f2;
+  --color-secondary: #f2f2f2;
   --color-chat: #b6b09f;
 }
 
@@ -13,4 +13,7 @@
     background-color: var(--color-bg);
     color: var(--color-primary);
   }
+}
+
+@layer utilities {
 }

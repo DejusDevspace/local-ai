@@ -82,7 +82,7 @@ const ChatContainer = () => {
   return (
     <div className="flex flex-col gap-8">
       <div
-        className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-tone rounded-xl p-4 gap-6 overflow-y-scroll"
+        className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-secondary rounded-xl p-4 gap-6 overflow-y-scroll"
         ref={chatContainerRef}
       >
         {messages.map((message, index) => {
@@ -113,7 +113,7 @@ const ChatContainer = () => {
             placeholder="Type your message..."
             value={input}
             onChange={handleInputChange}
-            className="bg-tone text-start p-4 rounded-full w-[90%] h-[48px] border-chat focus:border-blue-700 focus:outline"
+            className="bg-secondary text-start p-4 rounded-full w-[90%] h-[48px] border-chat focus:border-blue-700 focus:outline"
             disabled={isLoading}
           />
           <button
