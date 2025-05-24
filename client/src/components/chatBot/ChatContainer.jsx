@@ -94,17 +94,26 @@ const ChatContainer = () => {
               }`}
             >
               <div
-                className={`bg-chat max-w-[80%] p-4 rounded-4xl ${
+                className={`max-w-[80%] p-4 rounded-4xl ${
                   message.role === "assistant"
-                    ? "rounded-bl-sm "
-                    : "rounded-br-sm"
+                    ? "rounded-bl-sm bg-chat-assistant"
+                    : "rounded-br-sm bg-chat-user"
                 }`}
               >
-                <p>{message.content}</p>
+                <p className="text-black">{message.content}</p>
               </div>
             </div>
           );
         })}
+        {isLoading && (
+          <div className="justify-start">
+            <div
+              className={`max-w-[80%] w-fit p-4 rounded-4xl rounded-bl-sm bg-chat-assistant`}
+            >
+              <p className="text-black">loading...</p>
+            </div>
+          </div>
+        )}
       </div>
       <div>
         <form action="" className="flex gap-4 w-full" onSubmit={handleSubmit}>
@@ -113,7 +122,7 @@ const ChatContainer = () => {
             placeholder="Type your message..."
             value={input}
             onChange={handleInputChange}
-            className="bg-secondary text-start p-4 rounded-full w-[90%] h-[48px] border-chat focus:border-blue-700 focus:outline"
+            className="bg-chat-user text-start p-4 rounded-full w-[90%] h-[48px] border-chat focus:border-blue-700 focus:outline"
             disabled={isLoading}
           />
           <button
