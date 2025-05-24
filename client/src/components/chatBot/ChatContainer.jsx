@@ -82,10 +82,15 @@ const ChatContainer = () => {
   return (
     <div className="flex flex-col gap-8">
       <div
-        className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-secondary rounded-xl p-4 gap-6 overflow-y-scroll"
+        className="flex flex-col lg:h-[700px] lg:w-[900px] shadow-2xl bg-secondary rounded-xl p-4 gap-6 overflow-scroll scrollbar-hide"
         ref={chatContainerRef}
       >
         {messages.map((message, index) => {
+          const thoughts = message.content.includes("think")
+            ? message.content.split("</think>")[1]
+            : message.content;
+          const response =
+            message.role === "assistant" ? thoughts : message.content;
           return (
             <div
               key={index}
@@ -100,7 +105,7 @@ const ChatContainer = () => {
                     : "rounded-br-sm bg-chat-user"
                 }`}
               >
-                <p className="text-black">{message.content}</p>
+                <p className="text-black">{response}</p>
               </div>
             </div>
           );
