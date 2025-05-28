@@ -4,7 +4,7 @@ from ai.prompts import base_template
 from typing import Dict
 
 # "gemma3:1b"
-model = "deepseek-r1:8b"
+model = "gemma3:1b"
 
 class AssistantLLM:
     def __init__(self):
