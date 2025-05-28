@@ -115,7 +115,11 @@ const ChatContainer = () => {
             <div
               className={`max-w-[80%] w-fit p-4 rounded-4xl rounded-bl-sm bg-chat-assistant`}
             >
-              <p className="text-black">loading...</p>
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </div>
           </div>
         )}
